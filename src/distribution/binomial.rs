@@ -4,6 +4,7 @@ use special::Primitive;
 
 use distribution;
 use source::Source;
+extern crate std;
 
 /// A binomial distribution.
 #[derive(Clone, Copy, Debug)]
@@ -171,6 +172,7 @@ impl distribution::Inverse for Binomial {
             ($prod_term: expr) => ({
                 let mut k = 1;
                 let mut a = self.q.powi(self.n as i32);
+                if a == 0. { a = std::f64::MIN_POSITIVE;}
                 let mut sum = a - p;
                 while sum < 0.0 {
                     a *= $prod_term(k);
@@ -184,6 +186,7 @@ impl distribution::Inverse for Binomial {
             ($prod_term: expr) => ({
                 let mut k = 1;
                 let mut a = self.p.powi(self.n as i32);
+                if a == 0. { a = std::f64::MIN_POSITIVE;}
                 let mut sum = (1.0 - p) - a;
                 while sum >= 0.0 {
                     a *= $prod_term(k);
